@@ -1,7 +1,7 @@
 /* My Health — service worker: offline cache, push alarms, notification actions */
 importScripts('config.js');
 var C = self.MH_CONFIG || {};
-var CACHE = 'my-health-2.0.0';
+var CACHE = 'my-health-2.0.1';
 var ASSETS = ['./', 'index.html', 'app.js', 'i18n.js', 'config.js', 'vendor/supabase.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/badge-96.png', 'icons/apple-touch-icon.png'];
 
