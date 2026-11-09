@@ -381,7 +381,15 @@ function view(quiet){
   document.body.classList.toggle('simple',!!simple);
   var map={home:vHome,meds:vMeds,track:vTrack,tools:vTools,more:vMore};
   var h;try{h=simple?vSimple():(map[R.tab]||vHome)();}catch(err){console.error(err);h='<div class="card"><b>'+esc(t('Something went wrong'))+'</b><p class="small muted">'+esc(String(err&&err.message||err))+'</p><button class="btn s" data-act="go" data-tab="home">'+esc(t('Home'))+'</button></div>';}
+  /* keep horizontal chip rows where the user left them across re-renders */
+  var keepX=R.tab===view._tab?$$('#view .chips').map(function(c){return c.scrollLeft;}):[];view._tab=R.tab;
   $('#view').innerHTML='<div class="view'+(quiet===true?' q':'')+'">'+h+'</div>';
+  $$('#view .chips').forEach(function(c,i){
+    if(keepX[i])c.scrollLeft=keepX[i];
+    var a=c.querySelector('[aria-pressed="true"]');if(!a)return;
+    var l=a.offsetLeft-c.offsetLeft,r=l+a.offsetWidth;
+    if(l<c.scrollLeft)c.scrollLeft=l-16;else if(r>c.scrollLeft+c.clientWidth)c.scrollLeft=r-c.clientWidth+16;
+  });
   $$('.nav button').forEach(function(b){if(b.dataset.tab===R.tab&&!(R.tab==='more'&&R.sub==='sos'))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   var p=P();$('#whoName').textContent=pname(p)+(live('people').length>1?' ▾':'');
   updateCloudDot();
